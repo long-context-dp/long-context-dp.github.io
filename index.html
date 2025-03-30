@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- EDIT HERE: Update meta description and keywords -->
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- EDIT HERE: Update the page title -->
+  <title>Learning Long-Context Robot Policies via Past-Token Prediction</title>
+
+  <!-- Google Analytics (optional, remove if not used) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <!-- Fonts and Stylesheets -->
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/stanford.png">
+
+  <!-- Scripts -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Custom styles -->
+  <style>
+    .video-row {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.20);
+      background-color: #f9f9f9;
+    }
+    section.section {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+    .section h2.title, .section h3.subtitle {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .section p {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- EDIT HERE: Hero section with title, authors, conference, and links -->
+<!-- Modify paper title, subtitle, author names/links, venue, and buttons -->
+<section class="hero">
+  ...
+</section>
+
+<!-- EDIT HERE: Abstract section -->
+<!-- Replace abstract text -->
+<section class="section">
+  Reasoning over long sequences of observations and actions is essential for many robotic tasks. Yet, learning effective long-context policies from demonstrations remains challenging. As context length increases, training becomes prohibitively expensive due to the surge of memory demands, and policy performance often degrades due to spurious correlations. Recent methods typically sidestep these issues by truncating context length, discarding potentially critical information for subsequent decisions. In this paper, we propose an alternative approach that explicitly regularizes information retention from past observations. At the core of our method is Past-Token Prediction (PTP), an auxiliary task where the policy learns to predict past action tokens alongside future ones. This simple regularizer significantly strengthens temporal action dependencies, which are commonly lost in recent policies. In particular, we find that the benefit of PTP primarily emerges in the policy head rather than the visual encoder. Building on this observation, we introduce a multistage training strategy: first pre-train the visual encoder with short contexts, then fine-tune the policy head using cached long-context embeddings. This approach preserves the benefits of PTP while greatly reducing memory and computational overhead. Beyond training, we further leverage PTP as a self-verification mechanism, enabling the policy to search for action predictions consistent with past actions at test time. Experiments across seven simulated and four real-world tasks demonstrate that our proposed method improves the performance of long-context policies by 3× and accelerates policy training by more than 10×.
+</section>
+
+<!-- EDIT HERE: Analysis section -->
+<!-- Replace text, diagrams, or videos as needed -->
+<section class="section">
+  One major challenge in long-context imitation learning is causal confusion, where policies latch onto spurious correlations in the input context that do not truly influence expert behavior. This issue worsens with longer contexts, leading to overfitting during training and poor generalization at deployment. A classic example is copycat behavior, where the model simply mimics past actions without understanding their relationship to observations — especially problematic in continuous action spaces. Prior work has tried to mitigate this by suppressing past-action information. However, our findings reveal a different trend: modern policies tend to under-utilize, rather than over-rely on, temporal dependencies. Compared to expert demonstrations, learned policies exhibit significantly weaker temporal action coherence, and performance drops as this gap widens.
+</section>
+
+<!-- EDIT HERE: Analysis section -->
+<!-- Replace text, diagrams, or videos as needed -->
+<section class="section">
+  We introduce a simple yet effective method for long-context imitation learning that strengthens temporal coherence during both training and deployment. At the core is Past-Token Prediction (PTP), an auxiliary objective that tasks the policy with reconstructing both past and future actions from the current observation sequence. This encourages the model to better capture action dependencies over time. To scale PTP efficiently, we propose a multi-stage training recipe that freezes a short-horizon encoder, caches visual features, and trains the policy head using these cached embeddings. This approach reduces memory demands while maintaining strong performance. At test time, we extend PTP into a self-verification mechanism: the policy samples multiple candidate sequences and selects the one that best reconstructs the already-executed actions. This strategy improves rollout robustness and generalization, particularly in long-horizon settings.
+</section>
+
+<!-- EDIT HERE: Add or remove video experiment sections -->
+<!-- Replace or delete these depending on your project -->
+<section class="section">
+  TODO
+</section>
+
+<!-- EDIT HERE: Results section with figures and descriptions -->
+<!-- Replace images and result text -->
+<section class="section">
+  TODO
+</section>
+
+<!-- EDIT HERE: BibTeX citation -->
+<!-- Paste your citation -->
+<section class="section" id="BibTeX">
+  ...
+</section>
+
+<!-- Footer -->
+<!-- You can customize or keep attribution here -->
+<footer class="footer">
+  ...
+</footer>
+
+</body>
+</html>
