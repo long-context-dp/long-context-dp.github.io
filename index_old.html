@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Bidirectional Decoding (BID) explores and improves action chunking in generative behavioral cloning, providing consistent and effective closed-loop operations in dynamic environments.">
+  <meta name="keywords" content="BID, Bidirectional Decoding, Generative Behavioral Cloning, Robotics, Action Chunking">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bidirectional Decoding</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/stanford.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    .video-row {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.20);
+      background-color: #f9f9f9;
+    }
+
+    section.section {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .section h2.title, .section h3.subtitle {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .section p {
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav> -->
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Bidirectional Decoding</h1>
+          <h4 class="subtitle is-size-3 publication-subtitle">Improving Action Chunking via Guided Test-Time Sampling</h4>
+          <div class="is-size-4 publication-authors">
+            <span class="author-block">
+              <a href="https://sites.google.com/view/yuejiangliu/home">Yuejiang Liu</a><sup>*</sup>,</span>
+            <span class="author-block">
+              <a href="https://jubayer-ibn-hamid.github.io/">Jubayer Ibn Hamid</a><sup>*</sup>,</span>
+            <span class="author-block">
+              <a href="https://anxie.github.io/">Annie Xie</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.yoonholee.com/">Yoonho Lee</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.maximiliandu.com/">Max Du</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://ai.stanford.edu/~cbfinn/">Chelsea Finn</a>
+            </span>
+          </div>
+          <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+              <div class="column is-four-fifths">
+                <figure class="image is-centered" style="margin-bottom: 0;">
+                  <img src="./static/images/logo.jpg" alt="Stanford University">
+                </figure>
+                <h3 class="title is-4" style="margin-top: 8px;">ICLR 2025</h3>
+              </div>
+            </div>
+          </div>
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="./static/BID_paper.pdf"
+                   class="external-link button is-normal is-rounded is-dark" target="_blank">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2408.17355"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/YuejiangLIU/bid_diffusion"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (Diffusion)</span>
+                  </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/Jubayer-Hamid/bid_lerobot"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (LeRobot)</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <!-- <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- <section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <figure class="image is-centered" style="margin-bottom: 0;">
+          <img src="./static/images/trolleyteaser.png" alt="Teaser Image">
+        </figure>
+        <p class="has-text-left">
+          Illustration of a robot being tasked with catching a box on a moving trolley. (a) Action chunking executes action based on previous predictions, resulting in delayed reactions to the latest box location. (b) Receding horizon allows for faster reactions, but leads to jittery trajectory due to multimodal demonstrations. (c) Bidrectional Decoding explicitly searches for the optimal action from multiple predictions sampled at each time step, achieving long-range consistency while maintaining closed-loop reactivity. 
+        </p>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Predicting and executing a sequence of actions without intermediate replanning, known as action chunking, is increasingly used in robot learning from human demonstrations. Yet, its reported effects on the learned policy are inconsistent: some studies find it crucial for achieving strong results, while others observe decreased performance. In this paper, we first dissect how action chunking impacts the divergence between a learner and a demonstrator. We find that action chunking allows the learner to better capture the temporal dependencies in demonstrations but at the cost of reduced reactivity in stochastic environments. 
+            To address this tradeoff, we propose <i>Bidirectional Decoding</i> (BID), a test-time inference algorithm that bridges action chunking with closed-loop operations.
+            BID samples multiple predictions at each time step and searches for the optimal one based on two criteria: (i) backward coherence, which favors samples that align with previous decisions; (ii) forward contrast, which seeks samples of high likelihood for future plans.
+            By coupling decisions within and across action chunks, BID promotes consistency over time while maintaining reactivity to unexpected changes. 
+            Experimental results show that BID boosts the performance of two state-of-the-art generative policies across seven simulation benchmarks and two real-world tasks.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Analysis: Consistency-Reactivity Tradeoff</h2>
+        <!-- <h3 class="subtitle is-4">Why action chunking does not work in noisy/dynamic settings</h3> -->
+        <div class="content has-text-justified">
+          <p>
+            In action chunking, the agent predicts the joint distribution of a sequence of actions conditioned on the context and then executes all or part of the sequence without replanning. In our analysis, we consider two models with equal context length \( c \) and investigate the effect of using a longer action horizon. Consider a shorter action chunk of length \( h \) and a longer one of length \( h + d \). The longer action chunk benefits from remembering more past states and suffers from having not observed the more recent states, as is illustrated below:
+          </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <figure class="image is-centered" style="margin-top: 0; margin-bottom: 0;">
+          <img src="./static/images/theory_learners.png" alt="Analysis" style="width: 60%; height: auto; display: block; margin: 0 auto;">
+        </figure>
+        <p>
+          Fig 1: Shaded regions indicate observed history; darker indicate greater influence on current decision.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          <p>
+            The expected loss of the two agents with respect to the expert, \( \Delta_d := \min_{\pi_{h+d}} \mathbb{E} \left[\mathcal{L}(\pi_{h+d}, \pi^*) | C \right] - \min_{\pi_{h}} \mathbb{E} \left[\mathcal{L}(\pi_{h}, \pi^*) | C \right] \), are related by the following inequality. 
+            $$ \alpha_{f} - \epsilon_{b}\left(1 - \prod_{\tau \in \tau_b}P_b(\tau)(P_b(\tau) + \delta_b(\tau))\right) \leq \Delta_d \leq  \epsilon_{f}\left(1 - \prod_{\tau \in \tau_f}P_f(\tau)(P_f(\tau) + \delta_f(\tau))\right) - \alpha_{b}. $$ 
+            Intuitively, the advantage of each policy stems from the additional information it has access to (i.e., \( \alpha_f \) for \( \pi_h \) and \( \alpha_b \) for \( \pi_{h+d} \)) while the disadvantage is bounded by the maximum divergence arising from inferring missing information incorrectly. 
+            Our theoretical analysis provides us two important takeaways :
+          </p>
+          
+          <!-- First takeaway box -->
+          <div style="background-color: #f5f5f5; padding: 1rem; margin-top: 1rem; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+            <p>
+              <!-- First takeaway content -->
+              <strong>Takeaway 1:</strong> In deterministic environments, while both policies need to infer the same number of unobserved states, longer action horizon benefits from conditioning on additional actions, which may significantly aid in inferring the corresponding states through its action chunk. However, this is only true if the implicit dynamics model learned by the policy is approximately accurate. Note that \(\pi_{h+d}\) performs better as we increase the diversity of strategies present in the dataset i.e., as the distribution of actions taken by the expert prior to the context of the short horizon policy becomes higher variance. 
+            </p>
+          </div>
+          
+          <!-- Second takeaway box -->
+          <div style="background-color: #f5f5f5; padding: 1rem; margin-top: 1rem; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+            <p>
+              <!-- Second takeaway content -->
+              <strong>Takeaway 2:</strong>  Recent states are often more important to decision making and, therefore, the disadvantages of action chunking become pronounced when inferring these recent states becomes difficult. This can happen if the test environment is stochastic. This can also happen if the test environment is deterministic as long as the implicit dynamics model is inaccurate - either due to a distribution shift or because of learning difficulty.
+            </p>
+          </div>
+          <!-- Second takeaway box -->
+          <div style="background-color: #f5f5f5; padding: 1rem; margin-top: 1rem; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+            <p>
+              <!-- Second takeaway content -->
+              <strong>Takeaway 3:</strong> This analysis motivates us to use closed-loop operations, to maximize reactivity to environment stochasticity, while increasing temporal consistency through guided resampling.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Method: Bidirectional Decoding</h2>
+        <div class="container is-max-desktop">
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-four-fifths">
+              <figure class="image is-centered" style="margin-bottom: 0;">
+                <video autoplay loop muted playsinline>
+                  <source src="./static/videos/animation.mp4" type="video/mp4">
+                </video>
+              </figure>
+            </div>
+          </div>
+        </div>  
+        <div class="content has-text-justified">
+          <p>
+            We frame the problem of closed-loop action chunking as searching for the optimal action among a batch of samples drawn at each time step, $$ a^* = \arg \min_{a \in \mathcal{A}} \mathcal{L}_B(a) + \mathcal{L}_F(a) $$ where \(\mathcal{A}\) is the set of sampled action chunks, \( \mathcal{L}_B \) and \( \mathcal{L}_F \) are two criteria measuring the temporal dependency with respect to the backward decision and forward plan.
+            To ensure temporal coherence, we  reference the action chunk from the previous time step, \( \hat a := \{ {a}^{(t-1)}_{t-1}, \cdots, {a}^{(t-1)}_{t+l-1} \} \) and minimize the weighted sum of Euclidean distance across \( l - 1 \) overlapping steps: 
+            $$ \mathcal{L}_B = \sum_{\tau=0}^{l-1} \rho^\tau \left\| a_{t+\tau}^{(t)} - {\hat a}_{t+\tau}^{(t-1)} \right\|_2. $$
+            This backward objective encourages similar latent strategies between consecutive steps while allowing for gradual adaptation to unforeseen transition dynamics. <br> A robust policy should predict far enough to capture temporal dependencies in demonstrations. To ensure this, we compare each candidate plan with two reference sets: one from a well-trained model as the stronger policy, and another from an early underfitting checkpoint or a shorter prediction horizon model as the weaker policy. The forward objective minimizes the average distance to positive samples from the strong policy and maximizes the average distance to negative samples from the weak policy:
+            $$ \mathcal{L}_F = \frac{1}{N}\left(\sum_{a^{+} \in \mathcal{A}^{+}} \sum_{\tau=0}^{l} \left\| a^{(t)}_{t+\tau} - a^{+}_{t+\tau} \right\|_2 - \sum_{a^{-} \in \mathcal{A}^{-}} \sum_{\tau=0}^{l} \left\| a^{(t)}_{t+\tau} - a^{-}_{t+\tau} \right\|_2\right),$$ where \( \mathcal{A}^{+} = \mathcal{A} \setminus \{a\} \) is the positive set predicted by the strong policy \( \pi \), \( \mathcal{A}^{-} \) is the negative set predicted by the weak policy \( \pi' \) and \(N\) is the sample size.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- <section class="section" style="padding-top: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <figure class="image is-centered" style="margin-top: 0; margin-bottom: 0;">
+          <img src="./static/images/search.png" alt="Analysis image" style="width: 40%; height: auto; display: block; margin: 0 auto;">
+        </figure>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="content has-text-centered">
+      <h1 class="title is-3">Real World Experiments: Dynamic Moving Objects</h1>  
+    </div>
+    <div class="video-row">
+      <div class="columns is-centered is-multiline">
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">Vanilla Open-Loop</h3>
+            <video id="video1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/Random_open_cup_stochastic_trimmed.mov" type="video/mp4">
+            </video>
+            <p> Consistent but unreactive to cup's motion.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">Vanilla Closed-Loop</h3>
+            <video id="video2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/Random_closed_cup_stochastic_trimmed.mov" type="video/mp4">
+            </video>
+            <p>Reactive but inconsistent causing jittery motion.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">EMA Closed-Loop</h3>
+            <video id="video3" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/EMA_cup_stochastic_trimmed.mov" type="video/mp4">
+            </video>
+            <p>Reactions are slow and fails to grasp the cup firmly.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">BID Closed-Loop</h3>
+            <video id="video4" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/BID_cup_stochastic_trimmed.mov" type="video/mp4">
+            </video>
+            <p>Consistent with plan and reactive to cup's motion.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content has-text-justified">
+      <p>
+        We use a pretrained diffusion policy and compare the performance of BID with random sampling in open loop, random sampling in closed loop, and Exponential Moving Average (EMA) sampling. The first task is to <i>pick up a moving cup</i> whose initial position is fixed and <i>place it on a nearby saucer</i>. The cup is pulled with a string until both the gripper grasps the cup.
+      </p>
+    </div>
+    <div class="video-row">
+      <div class="columns is-centered is-multiline">
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">Vanilla Open-Loop <br> (static environment)</h3>
+            <video id="video5" autoplay controls muted loop playsinline height="100%" >
+              <source src="./static/videos/vanilla_droptoy_static_updated.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">BID Closed-Loop <br> (static environment)</h3>
+            <video id="video6" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/extended_BID_droptoy_static.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">Vanilla Open-Loop <br> (dynamic environment)</h3>
+            <video id="video7" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/extended_vanilla_droptoy_stochastic.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">BID Closed-Loop <br> (dynamic environment)</h3>
+            <video id="video8" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/BID_droptoy_stochastic.mov" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content has-text-justified">
+      <p>
+        Our next task for the robot is to <i>drop a toy into a plastic cup</i>. In the dynamic setting, this cup is moved by hand as the robot carries out the task.
+      </p>
+    </div>
+  </div>
+  <div class="container is-max-desktop">
+    <div class="content has-text-centered">
+      <h1 class="title is-3">Simulation Experiments: Stochastic Action Noises</h1>
+    </div>
+    <div class="content has-text-justified">
+      <p>
+        In simulation, we evaluate BID on the Push-T, RoboMimic, and 4-Object Franka Kitchen tasks. Below, we provide sample behaviors in stochastic environments.
+      </p>
+    </div>
+    <div class="video-row">
+      <div class="columns is-centered is-multiline">
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">Vanilla Open-Loop</h3>
+            <video id="video9" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/VanillaOpen_pushT.mp4" type="video/mp4">
+            </video>
+            <p>Not reactive to environment stochasticity.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">Vanilla Closed-Loop</h3>
+            <video id="video10" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/VanillaClosed_pushT.mp4" type="video/mp4">
+            </video>
+            <p>Reactive but not consistent with a long-term plan.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">EMA Closed-Loop</h3>
+            <video id="video11" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/EMA_pushT.mp4" type="video/mp4">
+            </video>
+            <p>Fails to balance reactivity and long-term plan. </p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">BID Closed-Loop</h3>
+            <video id="video12" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/BID_pushT.mp4" type="video/mp4">
+            </video>
+            <p>Reactive to stochasticity and consistent with plan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="video-row">
+      <div class="columns is-centered is-multiline">
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">Vanilla Open-Loop</h3>
+            <video id="video13" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/random_open_noisy_franka.mp4" type="video/mp4">
+            </video>
+            <p>Not reactive to stochasticity, thus unable to grab objects.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">Vanilla Closed-Loop</h3>
+            <video id="video14" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/random_close_noisy_franka.mp4" type="video/mp4">
+            </video>
+            <p>Reactive but inconsistent causing jittery motions.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">EMA Closed-Loop</h3>
+            <video id="video15" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/ema_noisy_franka.mp4" type="video/mp4">
+            </video>
+            <p>Not consistent with plan causing slower movements.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">BID Closed-Loop</h3>
+            <video id="video16" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/bbs_noisy_franka.mp4" type="video/mp4">
+            </video>
+            <p>Reacts to stochasticity and consistently executes plan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="video-row">
+      <div class="columns is-centered is-multiline">
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">Vanilla Open-Loop</h3>
+            <video id="video13" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/toolhang_randomopen_20002_ptus8x50.mp4" type="video/mp4">
+            </video>
+            <p>Fails to react to stochasticity causing lack of precision.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">Vanilla Closed-Loop</h3>
+            <video id="video14" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/toolhang_randomclose_20002_wbhfz0xa.mp4" type="video/mp4">
+            </video>
+            <p>Reacts to stochasticity but slow and idle trajectories.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">EMA Closed-Loop</h3>
+            <video id="video15" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/toolhang_ema_20002_lp9a2ntj.mp4" type="video/mp4">
+            </video>
+            <p>Reacts to stochasticity but imprecise actions.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6 has-text-centered">BID Closed-Loop</h3>
+            <video id="video16" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/toolhang_bbs_20002_7sabbkrs.mp4" type="video/mp4">
+            </video>
+            <p>Reacts to stochasticity and consistently executes plan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="video-row">
+      <div class="columns is-centered is-multiline">
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6">Vanilla Open-Loop</h3>
+            <video id="video13" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/square_randomopen_20007_2y1zhu16.mp4" type="video/mp4">
+            </video>
+            <p>Fails to react to stochasticity causing it to be stuck in a failure mode.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6">Vanilla Closed-Loop</h3>
+            <video id="video14" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/square_randomclose_20007_zlp6x3wg.mp4" type="video/mp4">
+            </video>
+            <p>Adapts to stochasticity but slow and jittery trajectories.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6">EMA Closed-Loop</h3>
+            <video id="video15" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/square_ema_20007_jk9zbaff.mp4" type="video/mp4">
+            </video>
+            <p>Cannot adapt to stochasiticity well enough leading it to fail to grasp the square properly multiple times.</p>
+          </div>
+        </div>
+        <div class="column is-one-quarter">
+          <div class="content">
+            <h3 class="title is-6">BID Closed-Loop</h3>
+            <video id="video16" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/square_bbs_20007_ffmnn4hx.mp4" type="video/mp4">
+            </video>
+            <p>Adapts to the stochasticity and carries out a consistent long-term plan. BID is also faster and smoother than other methods.</p>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</section>
+
+
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Results</h2>
+        <div class="content has-text-justified">
+          <p>
+            We evaluate BID on the Push-T, RoboMimic, and 4-Object Franka Kitchen tasks. While existing inference methods offer some benefits for closed-loop operations, they either lack robustness or are highly sensitive to decay rate. BID consistently achieves substantial gains across all tasks, <i>surpassing the vanilla baseline by over 32% in relative improvements</i>. 
+          </p>
+        <figure class="image is-centered" style="margin-bottom: 1rem;">
+          <img src="./static/images/Simulation_results.png" alt="Comparison of methods">
+        </figure>
+        <div class="content has-text-justified">
+          <p>
+            We also evaluate two critical properties of BID: scalability with increasing batch sizes and compatibility with existing inference methods. Notably, <i>BID benefits significantly from large batch sizes, demonstrating strong potential for test-time scaling</i>. Moreover, when combined with EMA, BID boosts the relative performance gain from 32% to 46%, exhibiting a <i>complementary effect with existing methods</i>.
+          </p>
+          <figure class="image is-centered" style="margin-bottom: 1rem;">
+            <img src="./static/images/scale+complement.png" alt="Scalability with increasing batch sizes and compatibility with existing inference methods">
+          </figure>
+          <div class="content has-text-justified">
+          <p>
+            We next extend our experiment to VQ-BET, another state-of-the-art robot policy built with autoregressive transformers, while also ablating each component of BID. We find that <i>BID demonstrates much higher robustness to stochastic noise</i> than other baselines and all the components of BID work synergistically to achieve the strongest performance across all environment settings.
+          </p>
+          <figure class="image is-centered" style="margin-bottom: 1rem;">
+            <img src="./static/images/vqbet_pusht.png" alt="Results on VQ-BET in Push-T task">
+          </figure>
+          <p>
+            In real world, we, first, consider a task where the robot is to deliver an object held in its gripper into a cup held by a human. This task mirrors
+            real-world scenarios where robots interact with a dynamic environment, accommodating moving objects and agents. In the second task, the robot is to pick up a moving cup and place it on a nearby saucer. BID achieves over 2x improvement in success rate compared to all other methods in the stochastic
+            setting while matching the performance of the best alternative in the static one.
+          </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top: 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <figure class="image is-centered" style="margin-top: 0; margin-bottom: 0;">
+          <img src="./static/images/realworldresults.png" alt="Real World Experiments Results" style="width: 90%; height: auto; display: block; margin: 0 auto;">
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>
+      @article{liu2025bidirectional,
+        title={Bidirectional Decoding: Improving Action Chunking via Closed-Loop Resampling},
+        author={Liu, Yuejiang and Hamid, Jubayer Ibn and Xie, Annie and Lee, Yoonho and Du, Max and Finn, Chelsea},
+        year={2025},
+        journal={International Conference on Learning Representations (ICLR)},
+        url={https://arxiv.org/abs/2408.17355}
+      }
+    </code></pre>
+  </div>
+</section>
+
+
+
+
+
+<footer class="footer">
+  <div class="content has-text-centered">
+    <span class="author-block"><sup>*</sup>Equal Contribution</span>
+  </div>
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>Page template borrowed from <a href="https://nerfies.github.io/"><span class="dnerf">Nerfies</span></a> and <a href="https://mobile-aloha.github.io/"><span class="dnerf">Mobile ALOHA</span></a>.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
