@@ -56,6 +56,7 @@
     .section p {
       margin-top: 0.5rem;
       margin-bottom: 0.5rem;
+      text-align: justify;
     }
     .section .title.is-3 {
       text-align: center;
@@ -233,101 +234,105 @@
 
 <section class="section">
   <div class="container is-max-desktop">
-    <!-- <h2 class="title is-3">Real-World Rollouts</h2> -->
-    <p class="mb-4">Below are representative vidoes of each method across the four real-world tasks.</p>
-
-    <!-- Table headers -->
+<!--     <h2 class="title is-3">Real-World Rollouts</h2>
+    <p class="mb-4">We compare rollouts across four real-world tasks and three methods: Short-Context (No History), Long-Context (Non-PTP), and our proposed PTP method.</p>
+ -->
+    <!-- Table header -->
     <div class="columns has-text-centered is-mobile is-vcentered mb-3">
-      <div class="column"><strong>Short-Context BC</strong></div>
-      <div class="column"><strong>Long-Context BC</strong></div>
-      <div class="column"><strong>PTP (Ours)</strong></div>
+      <div class="column"><strong>Short-Context (Baseline)</strong></div>
+      <div class="column"><strong>Long-Context (Baseline)</strong></div>
+      <div class="column"><strong>Long-Context (Ours)</strong></div>
     </div>
 
-    <!-- Row: Task 1 -->
-    <h3 class="subtitle is-6 has-text-left mb-2">Franka Block Move</h3>
-    <div class="columns is-mobile is-vcentered">
+    <!-- Row: Two Scoops -->
+    <h3 class="subtitle is-6 has-text-left mb-2">Franka Two Scoops</h3>
+    <div class="columns is-mobile is-vcentered video-row" data-group="row1">
       <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/block_short.mp4" type="video/mp4">
-          Your browser does not support the video tag.
+        <video class="sync-video" data-group="row1" preload="auto" autoplay muted playsinline>
+          <source src="./static/videos/compressed_twoscoopsnohistfast.mp4" type="video/mp4">
         </video>
       </div>
       <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/block_long.mp4" type="video/mp4">
-          Your browser does not support the video tag.
+        <video class="sync-video" data-group="row1" preload="auto" autoplay muted playsinline>
+          <source src="./static/videos/compressed_twoscoopsnonptpfast.mp4" type="video/mp4">
         </video>
       </div>
       <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/block_ptp.mp4" type="video/mp4">
-          Your browser does not support the video tag.
+        <video class="sync-video" data-group="row1" preload="auto" autoplay muted playsinline>
+          <source src="./static/videos/compressed_twoscoopshistfast.mp4" type="video/mp4">
         </video>
       </div>
     </div>
 
-    <!-- Row: Task 2 -->
-    <h3 class="subtitle is-6 has-text-left mt-5 mb-2">Franka Two Scoops</h3>
-    <div class="columns is-mobile is-vcentered">
-      <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/scoop_short.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/scoop_long.mp4" type="video/mp4">
-        </video>
-      </div>
-      <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/scoop_ptp.mp4" type="video/mp4">
-        </video>
-      </div>
-    </div>
-
-    <!-- Row: Task 3 -->
+    <!-- Row: Mug Replacement -->
     <h3 class="subtitle is-6 has-text-left mt-5 mb-2">Franka Mug Replacement</h3>
-    <div class="columns is-mobile is-vcentered">
+    <div class="columns is-mobile is-vcentered video-row" data-group="row2">
       <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/mug_short.mp4" type="video/mp4">
+        <video class="sync-video" data-group="row2" preload="auto" autoplay muted playsinline>
+          <source src="./static/videos/compressed_swapmugsnohistfast_2.mp4" type="video/mp4">
         </video>
       </div>
       <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/mug_long.mp4" type="video/mp4">
+        <video class="sync-video" data-group="row2" preload="auto" autoplay muted playsinline>
+          <source src="./static/videos/compressed_swapcupsnonptpfast.mp4" type="video/mp4">
         </video>
       </div>
       <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/mug_ptp.mp4" type="video/mp4">
+        <video class="sync-video" data-group="row2" preload="auto" autoplay muted playsinline>
+          <source src="./static/videos/compressed_swapmugsptpfast.mp4" type="video/mp4">
         </video>
       </div>
     </div>
 
-    <!-- Row: Task 4 -->
+    <!-- Row: Tape Replacement -->
     <h3 class="subtitle is-6 has-text-left mt-5 mb-2">Aloha Tape Replacement</h3>
-    <div class="columns is-mobile is-vcentered">
+    <div class="columns is-mobile is-vcentered video-row" data-group="row3">
       <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/tape_short.mp4" type="video/mp4">
+        <video class="sync-video" data-group="row3" preload="auto" autoplay muted playsinline>
+          <source src="./static/videos/compressed_aloha_replace_non_hist_fast.mp4" type="video/mp4">
         </video>
       </div>
       <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/tape_long.mp4" type="video/mp4">
+        <video class="sync-video" data-group="row3" preload="auto" autoplay muted playsinline>
+          <source src="./static/videos/compressed_aloha_replace_non_ptp_fast.mp4" type="video/mp4">
         </video>
       </div>
       <div class="column has-text-centered">
-        <video controls width="100%">
-          <source src="./static/videos/tape_ptp.mp4" type="video/mp4">
+        <video class="sync-video" data-group="row3" preload="auto" autoplay muted playsinline>
+          <source src="./static/videos/compressed_aloha_replace_ptp_fast.mp4" type="video/mp4">
         </video>
       </div>
     </div>
-
   </div>
 </section>
+
+<!-- JavaScript: Sync replay after all videos in a row finish -->
+<script>
+  const groupState = {};
+
+  document.querySelectorAll('video.sync-video').forEach(video => {
+    const group = video.dataset.group;
+
+    if (!groupState[group]) {
+      groupState[group] = { videos: [], ended: [] };
+    }
+
+    groupState[group].videos.push(video);
+
+    video.addEventListener('ended', () => {
+      groupState[group].ended.push(video);
+
+      if (groupState[group].ended.length === groupState[group].videos.length) {
+        // All videos in group finished
+        groupState[group].videos.forEach(v => {
+          v.load();  // avoids black flicker before replay
+          v.play();
+        });
+        groupState[group].ended = [];
+      }
+    });
+  });
+</script>
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
