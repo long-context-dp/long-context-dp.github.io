@@ -128,6 +128,29 @@
 
 <section class="section">
   <div class="container is-max-desktop">
+    <div class="columns is-vcentered">
+      <div class="column has-text-centered">
+        <figure>
+          <img src="./static/images/baseline_corr.png" style="max-width: 80%;" alt="Image 1 description">
+          <figcaption class="has-text-left is-size-6 mt-2 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
+            Temporal action correlations of baseline policies. Contrary to the Copycat literature, modern behavior cloning (BC) policies often under-utilize temporal action dependencies present in expert demonstrations.
+          </figcaption>
+        </figure>
+      </div>
+      <div class="column has-text-centered">
+        <figure>
+          <img src="./static/images/ptp_corr.png" style="max-width: 80%;" alt="Image 2 description">
+          <figcaption class="has-text-left is-size-6 mt-2 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
+            Temporal action correlations of our PTP-trained policies. As supervision over past actions increases (1, 8, 16), policy rollouts exhibit stronger temporal coherence and higher success rate.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
       <h2 class="title is-3">Method: Past-Token Prediction</h2>
       <p>Building upon our analysis, we introduce a simple yet effective method for long-context imitation learning. At the core is Past-Token Prediction (PTP), an auxiliary objective that tasks the policy to predict both past and future actions. This task encourages the model to better capture action dependencies over time. To scale PTP efficiently, we propose a multi-stage training recipe that freezes a short-horizon encoder, caches visual features, and trains the policy head using these cached embeddings. At test time, we extend PTP into a self-verification mechanism: the policy samples multiple candidate sequences and selects the one that best reconstructs the already-executed actions.
       </p>
@@ -139,14 +162,41 @@
     <div class="columns is-vcentered">
       <div class="column has-text-centered">
         <figure>
-          <img src="./static/images/baseline_corr.png" style="max-width: 100%;" alt="Image 1 description">
-          <figcaption class="has-text-centered is-size-6 mt-2">Temporal action correlation of baselines</figcaption>
+          <img src="./static/images/train.png" style="max-width: 80%;" alt="Image 1 description">
+          <figcaption class="has-text-centered is-size-6 mt-2 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
+            PTP training with cached embedding. 
+          </figcaption>
         </figure>
       </div>
       <div class="column has-text-centered">
         <figure>
-          <img src="./static/images/ptp_corr.png" style="max-width: 100%;" alt="Image 2 description">
-          <figcaption class="has-text-centered is-size-6 mt-2">Temporal action correlation of our method</figcaption>
+          <img src="./static/images/test.png" style="max-width: 100%;" alt="Image 2 description">
+          <figcaption class="has-text-centered is-size-6 mt-2 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
+            PTP inference with self-verification. 
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Simulation Experiments</h2>
+    <p>We evaluate our method on seven simulation tasks, including five from the RobotMimic benchmark and two newly designed long-horizon tasks that require historical context. Our approach significantly outperforms short-context and long-context baselines, especially in challenging manipulation scenarios.
+</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-vcentered">
+      <div class="column has-text-centered">
+        <figure>
+          <img src="./static/images/sim_result.png" style="max-width: 80%;" alt="Image 1 description">
+          <figcaption class="has-text-left is-size-6 mt-2 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
+          </figcaption>
         </figure>
       </div>
     </div>
@@ -155,8 +205,127 @@
 
 <section class="section">
   <div class="container is-max-desktop">
-    <h2 class="title is-3">Results</h2>
-    <p>TODO: Add experiment images, video sections, and results here.</p>
+    <h2 class="title is-3">Real-World Experiments</h2>
+    <p>We evaluate our method on four real-world tasks, each requiring historical context for task completion:</p>
+    <ul class="has-text-left" style="margin-left: 1.5rem; list-style-type: disc;">
+      <li><em>Franka Block Move</em>: Move a block from one side to the other. History is needed to infer the correct target side.</li>
+      <li><em>Franka Two Scoops</em>: Scoop and move two items to a target. History is required to keep count of how many scoops have been made.</li>
+      <li><em>Franka Mug Replacement</em>: Replace an old mug with a new one. History helps distinguish between the two mugs.</li>
+      <li><em>Aloha Tape Replacement</em>: Replace an old tape roll with a new one. History is necessary to identify the correct tape to remove.</li>
+    </ul>
+    <p>Our method consistently outperforms both short-context and long-context baselines across all four tasks.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-vcentered">
+      <div class="column has-text-centered">
+        <figure>
+          <img src="./static/images/real_result.png" style="max-width: 65%;" alt="Image 1 description">
+          <figcaption class="has-text-left is-size-6 mt-2 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- <h2 class="title is-3">Real-World Rollouts</h2> -->
+    <p class="mb-4">Below are representative vidoes of each method across the four real-world tasks.</p>
+
+    <!-- Table headers -->
+    <div class="columns has-text-centered is-mobile is-vcentered mb-3">
+      <div class="column"><strong>Short-Context BC</strong></div>
+      <div class="column"><strong>Long-Context BC</strong></div>
+      <div class="column"><strong>PTP (Ours)</strong></div>
+    </div>
+
+    <!-- Row: Task 1 -->
+    <h3 class="subtitle is-5 has-text-left mb-2">Franka Block Move</h3>
+    <div class="columns is-mobile is-vcentered">
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/block_short.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/block_long.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/block_ptp.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+
+    <!-- Row: Task 2 -->
+    <h3 class="subtitle is-5 has-text-left mt-5 mb-2">Franka Two Scoops</h3>
+    <div class="columns is-mobile is-vcentered">
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/scoop_short.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/scoop_long.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/scoop_ptp.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- Row: Task 3 -->
+    <h3 class="subtitle is-5 has-text-left mt-5 mb-2">Franka Mug Replacement</h3>
+    <div class="columns is-mobile is-vcentered">
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/mug_short.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/mug_long.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/mug_ptp.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <!-- Row: Task 4 -->
+    <h3 class="subtitle is-5 has-text-left mt-5 mb-2">Aloha Tape Replacement</h3>
+    <div class="columns is-mobile is-vcentered">
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/tape_short.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/tape_long.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="column has-text-centered">
+        <video controls width="100%">
+          <source src="./static/videos/tape_ptp.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
   </div>
 </section>
 
