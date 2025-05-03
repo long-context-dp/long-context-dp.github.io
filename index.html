@@ -2,10 +2,10 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="Learning Long-Context Robot Policies via Past-Token Prediction">
+  <meta name="description" content="Learning Long-Context Diffusion Policies via Past-Token Prediction">
   <meta name="keywords" content="PTP, Long-Context, Robot Learning, Imitation Learning">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Learning Long-Context Robot Policies via Past-Token Prediction</title>
+  <title>Learning Long-Context Diffusion Policies via Past-Token Prediction</title>
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
@@ -61,6 +61,22 @@
     .section .title.is-3 {
       text-align: center;
     }
+    .columns.is-vcentered > .column {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch; /* makes all columns the same height */
+      justify-content: center;
+    }
+    .equal-height-figure {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center; /* centers contents inside the figure */
+      height: 100%;
+      margin-bottom: 0 !important;
+      margin: 0 auto; /* centers the figure in the column */
+      box-sizing: border-box;
+    }
   </style>
 </head>
 <body>
@@ -70,7 +86,7 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">Learning Long-Context Robot Policies via Past-Token Prediction</h1>
+          <h1 class="title is-1 publication-title">Learning Long-Context Diffusion Policies via Past-Token Prediction</h1>
           <div class="is-size-5 publication-authors">
             <!-- Replace these with your actual authors -->
 <!--             <span class="author-block">Author 1<sup>*</sup>,</span>
@@ -114,7 +130,7 @@
 <section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3">Abstract</h2>
-    <p>Reasoning over long sequences of observations and actions is essential for many robotic tasks. Yet, learning effective long-context policies from demonstrations remains challenging. As context length increases, training becomes prohibitively expensive due to the surge of memory demands, and policy performance often degrades due to spurious correlations. Recent methods typically sidestep these issues by truncating context length, discarding potentially critical information for subsequent decisions. In this paper, we propose an alternative approach that explicitly regularizes information retention from past observations. At the core of our method is Past-Token Prediction (PTP), an auxiliary task where the policy learns to predict past action tokens alongside future ones. This simple regularizer significantly strengthens temporal action dependencies, which are commonly lost in recent policies. In particular, we find that the benefit of PTP primarily emerges in the policy head rather than the visual encoder. Building on this observation, we introduce a multistage training strategy: first pre-train the visual encoder with short contexts, then fine-tune the policy head using cached long-context embeddings. This approach preserves the benefits of PTP while greatly reducing memory and computational overhead. Beyond training, we further leverage PTP as a self-verification mechanism, enabling the policy to search for action predictions consistent with past actions at test time. Experiments across seven simulated and four real-world tasks demonstrate that our proposed method improves the performance of long-context policies by 3× and accelerates policy training by more than 10×.
+    <p>Reasoning over long sequences of observations and actions is essential for many robotic tasks. Yet, learning effective long-context policies from demonstrations remains challenging. As context length increases, training becomes increasingly expensive due to rising memory demands, and policy performance often degrades as a result of spurious correlations. Recent methods typically sidestep these issues by truncating context length, discarding historical information that may be critical for subsequent decisions. In this paper, we propose an alternative approach that explicitly regularizes the retention of past information. We first revisit the copycat problem in imitation learning and identify an opposite challenge in recent diffusion policies: rather than over-relying on prior actions, they often fail to capture essential dependencies between past and future actions. To address this, we introduce Past-Token Prediction (PTP), an auxiliary task in which the policy learns to predict past action tokens alongside future ones. This regularization significantly improves temporal modeling in the policy head, with minimal reliance on visual representations. Building on this observation, we further introduce a multistage training strategy: pre-train the visual encoder with short contexts, and fine-tune the policy head using cached long-context embeddings. This strategy preserves the benefits of PTP while greatly reducing memory and computational overhead. Finally, we extend PTP into a self-verification mechanism at test time, enabling the policy to score and select candidates consistent with past actions during inference. Experiments across four real-world and six simulated tasks demonstrate that our proposed method improves the performance of long-context diffusion policies by 3× and accelerates policy training by more than 10×.
     </p>
   </div>
 </section>
@@ -131,17 +147,17 @@
   <div class="container is-max-desktop">
     <div class="columns is-vcentered">
       <div class="column has-text-centered">
-        <figure>
-          <img src="./static/images/baseline_corr.png" style="max-width: 80%;" alt="Image 1 description">
-          <figcaption class="has-text-left is-size-6 mt-2 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
-            Temporal action correlations of baseline policies. Contrary to the Copycat literature, modern behavior cloning (BC) policies often under-utilize temporal action dependencies present in expert demonstrations.
+        <figure class="equal-height-figure">
+          <img src="./static/images/baseline_corr.png" style="max-width: 60%;" alt="Image 1 description">
+          <figcaption class="has-text-left is-size-6 mt-2 mb-0 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
+            Temporal action correlations of long-context robot policies. Contrary to regression-based policies, recent diffusion-based policies often under-utilize temporal action dependencies present in expert demonstrations.
           </figcaption>
         </figure>
       </div>
       <div class="column has-text-centered">
-        <figure>
-          <img src="./static/images/ptp_corr.png" style="max-width: 80%;" alt="Image 2 description">
-          <figcaption class="has-text-left is-size-6 mt-2 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
+        <figure class="equal-height-figure">
+          <img src="./static/images/ptp_corr.png" style="max-width: 70%;" alt="Image 2 description">
+          <figcaption class="has-text-left is-size-6 mt-2 mb-0 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
             Temporal action correlations of our PTP-trained policies. As supervision over past actions increases (1, 8, 16), policy rollouts exhibit stronger temporal coherence and higher success rate.
           </figcaption>
         </figure>
@@ -338,7 +354,7 @@
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <pre><code>@article{ptp2025,
-  title={Learning Long-Context Robot Policies via Past-Token Prediction},
+  title={Learning Long-Context Diffusion Policies via Past-Token Prediction},
   year={2025},
 }</code></pre>
   </div>
