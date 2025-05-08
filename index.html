@@ -129,6 +129,18 @@
 
 <section class="section">
   <div class="container is-max-desktop">
+    <div class="has-text-centered">
+      <video width="720" controls>
+        <source src="./static/videos/video_ptp_corl.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <!-- <p class="is-size-6 has-text-grey mt-2">Overview of our approach in action.</p> -->
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
     <h2 class="title is-3">Abstract</h2>
     <p>Reasoning over long sequences of observations and actions is essential for many robotic tasks. Yet, learning effective long-context policies from demonstrations remains challenging. As context length increases, training becomes increasingly expensive due to rising memory demands, and policy performance often degrades as a result of spurious correlations. Recent methods typically sidestep these issues by truncating context length, discarding historical information that may be critical for subsequent decisions. In this paper, we propose an alternative approach that explicitly regularizes the retention of past information. We first revisit the copycat problem in imitation learning and identify an opposite challenge in recent diffusion policies: rather than over-relying on prior actions, they often fail to capture essential dependencies between past and future actions. To address this, we introduce Past-Token Prediction (PTP), an auxiliary task in which the policy learns to predict past action tokens alongside future ones. This regularization significantly improves temporal modeling in the policy head, with minimal reliance on visual representations. Building on this observation, we further introduce a multistage training strategy: pre-train the visual encoder with short contexts, and fine-tune the policy head using cached long-context embeddings. This strategy preserves the benefits of PTP while greatly reducing memory and computational overhead. Finally, we extend PTP into a self-verification mechanism at test time, enabling the policy to score and select candidates consistent with past actions during inference. Experiments across four real-world and six simulated tasks demonstrate that our proposed method improves the performance of long-context diffusion policies by 3× and accelerates policy training by more than 10×.
     </p>
@@ -265,17 +277,20 @@
     <div class="columns is-mobile is-vcentered video-row" data-group="row1">
       <div class="column has-text-centered">
         <video class="sync-video" data-group="row1" preload="auto" autoplay muted playsinline>
-          <source src="./static/videos/compressed_twoscoopsnohistfast.mp4" type="video/mp4">
+          <!-- <source src="./static/videos/compressed_twoscoopsnohistfast.mp4" type="video/mp4"> -->
+          <source src="./static/videos/twoscoopsnohistfast.mp4" type="video/mp4">
         </video>
       </div>
       <div class="column has-text-centered">
         <video class="sync-video" data-group="row1" preload="auto" autoplay muted playsinline>
-          <source src="./static/videos/compressed_twoscoopsnonptpfast.mp4" type="video/mp4">
+          <!-- <source src="./static/videos/compressed_twoscoopsnonptpfast.mp4" type="video/mp4"> -->
+          <source src="./static/videos/twoscoopsnonptpfast.mp4" type="video/mp4">
         </video>
       </div>
       <div class="column has-text-centered">
         <video class="sync-video" data-group="row1" preload="auto" autoplay muted playsinline>
-          <source src="./static/videos/compressed_twoscoopshistfast.mp4" type="video/mp4">
+          <!-- <source src="./static/videos/compressed_twoscoopshistfast.mp4" type="video/mp4"> -->
+          <source src="./static/videos/twoscoopsptpfast.mp4" type="video/mp4">
         </video>
       </div>
     </div>
@@ -285,17 +300,20 @@
     <div class="columns is-mobile is-vcentered video-row" data-group="row2">
       <div class="column has-text-centered">
         <video class="sync-video" data-group="row2" preload="auto" autoplay muted playsinline>
-          <source src="./static/videos/compressed_swapmugsnohistfast_2.mp4" type="video/mp4">
+          <!-- <source src="./static/videos/compressed_swapmugsnohistfast_2.mp4" type="video/mp4"> -->
+          <source src="./static/videos/swapmugnohistfast.mp4" type="video/mp4">
         </video>
       </div>
       <div class="column has-text-centered">
         <video class="sync-video" data-group="row2" preload="auto" autoplay muted playsinline>
-          <source src="./static/videos/compressed_swapcupsnonptpfast.mp4" type="video/mp4">
+          <!-- <source src="./static/videos/compressed_swapcupsnonptpfast.mp4" type="video/mp4"> -->
+          <source src="./static/videos/swapcupsnonptpfast.mp4" type="video/mp4">
         </video>
       </div>
       <div class="column has-text-centered">
         <video class="sync-video" data-group="row2" preload="auto" autoplay muted playsinline>
-          <source src="./static/videos/compressed_swapmugsptpfast.mp4" type="video/mp4">
+          <!-- <source src="./static/videos/compressed_swapmugsptpfast.mp4" type="video/mp4"> -->
+          <source src="./static/videos/swapmugsptpfast.mp4" type="video/mp4">
         </video>
       </div>
     </div>
@@ -350,7 +368,7 @@
   });
 </script>
 
-<section class="section" id="BibTeX">
+<!-- <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <pre><code>@article{ptp2025,
@@ -369,7 +387,7 @@
       <p>Page template adapted from <a href="https://nerfies.github.io/">Nerfies</a>.</p>
     </div>
   </div>
-</footer>
+</footer> -->
 
 </body>
 </html>
