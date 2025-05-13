@@ -73,9 +73,15 @@
       justify-content: space-between;
       align-items: center; /* centers contents inside the figure */
       height: 100%;
-      margin-bottom: 0 !important;
+/*      margin-bottom: 0 !important;*/
       margin: 0 auto; /* centers the figure in the column */
       box-sizing: border-box;
+    }
+    .hero {
+      padding-bottom: 0.0rem !important; /* reduce spacing under the hero */
+    }
+    .hero-body {
+      padding-bottom: 0.0rem !important; /* tighten vertical spacing inside hero */
     }
   </style>
 </head>
@@ -88,6 +94,31 @@
         <div class="column has-text-centered">
           <h1 class="title is-1 publication-title">Learning Long-Context Diffusion Policies via Past-Token Prediction</h1>
           <div class="is-size-5 publication-authors">
+
+          <!-- Author Info Start -->
+          <div class="is-size-4 publication-authors">
+            <span class="author-block">
+              <a href="https://marceltorne.github.io/">Marcel Villasevil</a><sup>*</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.andyta.ng/">Andy Tang</a><sup>*</sup>,</span>
+            <span class="author-block">
+              <a href="https://sites.google.com/view/yuejiangliu/home">Yuejiang Liu</a><sup>*</sup>,</span>
+            <span class="author-block">
+              <a href="https://ai.stanford.edu/~cbfinn/">Chelsea Finn</a>
+            </span>
+          </div>
+          <div class="container is-max-desktop">
+            <div class="columns is-centered has-text-centered">
+              <div class="column is-four-fifths">
+                <figure class="image is-centered" style="margin-bottom: 0;">
+                  <img src="./static/images/logo.jpg" alt="Stanford University">
+                </figure>
+                <!-- <h3 class="title is-4" style="margin-top: 8px;"> 2025</h3> -->
+              </div>
+            </div>
+          </div>          
+          <!-- Author Info End -->
+
             <!-- Replace these with your actual authors -->
 <!--             <span class="author-block">Author 1<sup>*</sup>,</span>
             <span class="author-block">Author 2<sup>*</sup>,</span>
@@ -106,6 +137,38 @@
           </div>
           <div class="column has-text-centered">
             <div class="publication-links">
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2408.17355"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv (soon)</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Github (soon)</span>
+                  </a>
+              </span>
               <!-- Add links as needed -->
 <!--               <span class="link-block">
                 <a href="./static/PTP_paper.pdf" class="external-link button is-normal is-rounded is-dark" target="_blank">
@@ -127,17 +190,16 @@
   </div>
 </section>
 
-<section class="section">
+<!-- <section class="section">
   <div class="container is-max-desktop">
     <div class="has-text-centered">
       <video width="720" controls>
         <source src="./static/videos/video_ptp_corl.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
-      <!-- <p class="is-size-6 has-text-grey mt-2">Overview of our approach in action.</p> -->
     </div>
   </div>
-</section>
+</section> -->
 
 <section class="section">
   <div class="container is-max-desktop">
@@ -160,16 +222,18 @@
     <div class="columns is-vcentered">
       <div class="column has-text-centered">
         <figure class="equal-height-figure">
-          <img src="./static/images/baseline_corr.png" style="max-width: 60%;" alt="Image 1 description">
-          <figcaption class="has-text-left is-size-6 mt-2 mb-0 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
+          <img src="./static/images/baseline_corr.png" style="height: 260px; margin-bottom: 0.2rem;" alt="Image 1 description">
+          <!-- <figcaption class="has-text-left is-size-6 mt-2 mb-0 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;"> -->
+          <figcaption class="has-text-left is-size-6 mb-0 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif; margin-top: 0.5rem;">
             Temporal action correlations of long-context robot policies. Contrary to regression-based policies, recent diffusion-based policies often under-utilize temporal action dependencies present in expert demonstrations.
           </figcaption>
         </figure>
       </div>
       <div class="column has-text-centered">
         <figure class="equal-height-figure">
-          <img src="./static/images/ptp_corr.png" style="max-width: 70%;" alt="Image 2 description">
-          <figcaption class="has-text-left is-size-6 mt-2 mb-0 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;">
+          <img src="./static/images/ptp_corr.png" style="height: 260px; margin-bottom: 0.2rem;" alt="Image 2 description">
+          <figcaption class="has-text-left is-size-6 mb-0 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif; margin-top: 0.5rem;">
+          <!-- <figcaption class="has-text-left is-size-6 mt-2 mb-0 has-text-grey has-text-weight-light" style="font-family: 'Noto Sans', serif;"> -->
             Temporal action correlations of our PTP-trained policies. As supervision over past actions increases (1, 8, 16), policy rollouts exhibit stronger temporal coherence and higher success rate.
           </figcaption>
         </figure>
@@ -388,6 +452,30 @@
     </div>
   </div>
 </footer> -->
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>
+      @article{2025ldp,
+        title={Learning Long-Context Diffusion Policies via Past-Token Prediction},
+        author={Villasevil, Marcel and Tang, Andy and Liu, Yuejiang and Finn, Chelsea},
+        year={2025},
+      }
+    </code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="content has-text-centered">
+    <span class="author-block"><sup>*</sup>Equal Contribution</span>
+  </div>
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>Page template borrowed from <a href="https://nerfies.github.io/"><span class="dnerf">Nerfies</span></a> and <a href="https://bid-robot.github.io/"><span class="bid">Bidirectional Decoding</span></a>.</p>
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>
