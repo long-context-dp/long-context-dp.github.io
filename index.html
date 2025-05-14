@@ -423,7 +423,7 @@
       if (groupState[group].ended.length === groupState[group].videos.length) {
         // All videos in group finished
         groupState[group].videos.forEach(v => {
-          v.load();  // avoids black flicker before replay
+          v.currentTime = 0;
           v.play();
         });
         groupState[group].ended = [];
